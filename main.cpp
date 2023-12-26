@@ -3,6 +3,7 @@
 #include "Benchmarker.h"
 #include "BMPFile.h"
 #include "BMPSerializer.h"
+#include "SerialMedianFilter.h"
 
 int main(int argc, char* argv[])
 {
@@ -24,17 +25,25 @@ int main(int argc, char* argv[])
 	const auto benchmarker = new Benchmarker();
 	benchmarker->startBenchmark();
 
-	const auto bmp = BMPSerializer::load(std::filesystem::current_path() / parameterValue);
+	try
+	{
+		BMPFile inputBMP({});
+		const auto inputPath = std::filesystem::current_path() / parameterValue;
+		BMPSerializer::load(inputPath, inputBMP);
 
-	const auto pixel = bmp->pixel(15, 3);
-	std::cout << "First pixel (RGBA): "
-		<< std::to_integer<int>(std::get<0>(pixel))
-		<< ", " << std::to_integer<int>(std::get<1>(pixel))
-		<< ", " << std::to_integer<int>(std::get<2>(pixel))
-		<< ", " << std::to_integer<int>(std::get<3>(pixel));
+		const auto filter = new SerialMedianFilter(inputBMP, 3);
+		BMPFile outputBMP({});
+		filter->filter(outputBMP);
 
-	const auto outputPath = std::filesystem::current_path() / "out" / "out.bmp";
-	BMPSerializer::write(outputPath, bmp);
+		const auto outputPath = std::filesystem::current_path() / "out" / "out.bmp";
+		BMPSerializer::write(outputPath, outputBMP);
+	}
+	catch (std::exception& e)
+	{
+		std::cout << e.what();
+		return -1;
+	}
+
 
 	benchmarker->stopBenchmark();
 

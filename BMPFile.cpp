@@ -8,37 +8,33 @@ constexpr auto IMG_WIDTH_OFFSET = BMP_HEADER_SIZE + 4;
 constexpr auto IMG_HEIGHT_OFFSET = BMP_HEADER_SIZE + 2 * 4;
 constexpr auto BIT_DEPTH_OFFSET = BMP_HEADER_SIZE + 3 * 4 + 2;
 
-BMPFile::BMPFile(std::vector<std::byte> data)
+BMPFile::BMPFile(const std::vector<std::byte>& data)
 {
-	m_data = std::move(data);
-
-	m_pixelArrayOffset = packed4(rawData(PIXEL_ARR_OFFSET_OFFSET));
-	m_imageWidth = packed4(rawData(IMG_WIDTH_OFFSET));
-	m_imageHeight = packed4(rawData(IMG_HEIGHT_OFFSET));
-	m_bitDepth = packed2(rawData(BIT_DEPTH_OFFSET));
-
-	// row size should be a multiple of 4 bytes
-	m_rowPaddingBits = (m_imageWidth * m_bitDepth) % 32;
+	setData(data);
 }
 
-const std::vector<std::byte>& BMPFile::data()
+void BMPFile::setData(const std::vector<std::byte>& data)
+{
+	m_data = data;
+	if (!m_data.empty())
+	{
+		parseData();
+	}
+}
+
+const std::vector<std::byte>& BMPFile::data() const
 {
 	return m_data;
 }
 
-std::byte* BMPFile::rawData()
+const std::byte* BMPFile::rawData() const
 {
 	return m_data.data();
 }
 
-std::byte* BMPFile::rawData(size_t offset)
+const std::byte* BMPFile::rawData(size_t offset) const
 {
 	return rawData() + offset;
-}
-
-std::vector<std::byte> BMPFile::header() const
-{
-	return { m_data.begin(), m_data.begin() + m_pixelArrayOffset };
 }
 
 uint32_t BMPFile::bitDepth() const
@@ -72,7 +68,18 @@ RGBAColor BMPFile::pixel(int column, int row) const
 	return { r, g, b, a };
 }
 
-uint32_t BMPFile::packed4(std::byte* bytes)
+void BMPFile::parseData()
+{
+	m_pixelArrayOffset = packed4(rawData(PIXEL_ARR_OFFSET_OFFSET));
+	m_imageWidth = packed4(rawData(IMG_WIDTH_OFFSET));
+	m_imageHeight = packed4(rawData(IMG_HEIGHT_OFFSET));
+	m_bitDepth = packed2(rawData(BIT_DEPTH_OFFSET));
+
+	// row size should be a multiple of 4 bytes
+	m_rowPaddingBits = (m_imageWidth * m_bitDepth) % 32;
+}
+
+uint32_t BMPFile::packed4(const std::byte* bytes)
 {
 	// little-endian
 	return static_cast<unsigned char>(bytes[3]) << 24 |
@@ -81,7 +88,7 @@ uint32_t BMPFile::packed4(std::byte* bytes)
 		static_cast<unsigned char>(bytes[0]);
 }
 
-uint32_t BMPFile::packed2(std::byte* bytes)
+uint32_t BMPFile::packed2(const std::byte* bytes)
 {
 	// little-endian
 	return static_cast<unsigned char>(bytes[1]) << 8 |

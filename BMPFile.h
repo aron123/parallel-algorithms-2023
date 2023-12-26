@@ -7,13 +7,15 @@ using RGBAColor = std::tuple<std::byte, std::byte, std::byte, std::byte>;
 class BMPFile
 {
 public:
-	BMPFile(std::vector<std::byte> data);
+	BMPFile(const std::vector<std::byte>& data);
+	BMPFile(const BMPFile& bmp) = default;
 
-	[[nodiscard]] const std::vector<std::byte>& data();
-	[[nodiscard]] std::byte* rawData();
-	[[nodiscard]] std::byte* rawData(size_t offset);
+	void setData(const std::vector<std::byte>& data);
 
-	[[nodiscard]] std::vector<std::byte> header() const;
+	[[nodiscard]] const std::vector<std::byte>& data() const;
+	[[nodiscard]] const std::byte* rawData() const;
+	[[nodiscard]] const std::byte* rawData(size_t offset) const;
+	
 	[[nodiscard]] uint32_t bitDepth() const;
 	[[nodiscard]] uint32_t width() const;
 	[[nodiscard]] uint32_t height() const;
@@ -29,7 +31,9 @@ private:
 	uint32_t m_bitDepth = 0;
 	uint32_t m_rowPaddingBits = 0;
 
-	static uint32_t packed4(std::byte* bytes);
-	static uint32_t packed2(std::byte* bytes);
+	void parseData();
+
+	static uint32_t packed4(const std::byte* bytes);
+	static uint32_t packed2(const std::byte* bytes);
 };
 

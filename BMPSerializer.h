@@ -5,7 +5,7 @@
 class BMPSerializer
 {
 public:
-	static BMPFile* load(const std::filesystem::path& filePath);
-	static void write(const std::filesystem::path& filePath, BMPFile* file);
+	static void load(const std::filesystem::path& filePath, BMPFile& bmpFile);
+	static void write(const std::filesystem::path& filePath, const BMPFile& bmpFile);
 };
 
