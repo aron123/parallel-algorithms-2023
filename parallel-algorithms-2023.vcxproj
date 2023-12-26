@@ -143,11 +143,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Benchmarker.cpp" />
     <ClCompile Include="BMPFile.cpp" />
-    <ClCompile Include="main.cpp" />
+    <ClCompile Include="BMPSerializer.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="MedianFilter.cpp" />
+    <ClCompile Include="SerialMedianFilter.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Benchmarker.h" />
     <ClInclude Include="BMPFile.h" />
+    <ClInclude Include="BMPSerializer.h" />
+    <ClInclude Include="MedianFilter.h" />
+    <ClInclude Include="SerialMedianFilter.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

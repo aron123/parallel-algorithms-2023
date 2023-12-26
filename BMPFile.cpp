@@ -1,58 +1,89 @@
 #include "BMPFile.h"
 
-#include <fstream>
 #include <utility>
 
-BMPFile::BMPFile(const std::filesystem::path& filePath)
-{
-	m_filename = filePath.string();
-}
+constexpr auto BMP_HEADER_SIZE = 14;
+constexpr auto PIXEL_ARR_OFFSET_OFFSET = 10;
+constexpr auto IMG_WIDTH_OFFSET = BMP_HEADER_SIZE + 4;
+constexpr auto IMG_HEIGHT_OFFSET = BMP_HEADER_SIZE + 2 * 4;
+constexpr auto BIT_DEPTH_OFFSET = BMP_HEADER_SIZE + 3 * 4 + 2;
 
-void BMPFile::load()
-{
-	const std::filesystem::path inputFilePath{ m_filename };
-	const auto size = file_size(inputFilePath);
-	if (size == 0) {
-		return;
-	}
-
-	m_data.resize(size);
-
-	std::ifstream inputFile(m_filename, std::ios_base::binary);
-	inputFile.read(reinterpret_cast<char*>(m_data.data()), size);
-	inputFile.close();
-}
-
-void BMPFile::setData(std::vector<std::byte> data)
+BMPFile::BMPFile(std::vector<std::byte> data)
 {
 	m_data = std::move(data);
+
+	m_pixelArrayOffset = packed4(rawData(PIXEL_ARR_OFFSET_OFFSET));
+	m_imageWidth = packed4(rawData(IMG_WIDTH_OFFSET));
+	m_imageHeight = packed4(rawData(IMG_HEIGHT_OFFSET));
+	m_bitDepth = packed2(rawData(BIT_DEPTH_OFFSET));
+
+	// row size should be a multiple of 4 bytes
+	m_rowPaddingBits = (m_imageWidth * m_bitDepth) % 32;
 }
 
-void BMPFile::setFilePath(const std::filesystem::path& filePath)
+const std::vector<std::byte>& BMPFile::data()
 {
-	m_filename = filePath.string();
-}
-
-void BMPFile::write()
-{
-	if (m_data.empty())
-	{
-		throw std::exception("ERROR: File is empty.");
-	}
-
-	const std::filesystem::path outputFilePath{ m_filename };
-	std::ofstream outputFile{ outputFilePath, std::ios::binary };
-
-	outputFile.write(reinterpret_cast<const char*>(m_data.data()), m_data.size() * sizeof(decltype(m_data)::value_type));
-	outputFile.close();
-}
-
-std::vector<std::byte> BMPFile::data()
-{
-	if (m_data.empty())
-	{
-		load();
-	}
-
 	return m_data;
+}
+
+std::byte* BMPFile::rawData()
+{
+	return m_data.data();
+}
+
+std::byte* BMPFile::rawData(size_t offset)
+{
+	return rawData() + offset;
+}
+
+std::vector<std::byte> BMPFile::header() const
+{
+	return { m_data.begin(), m_data.begin() + m_pixelArrayOffset };
+}
+
+uint32_t BMPFile::bitDepth() const
+{
+	return m_bitDepth;
+}
+
+uint32_t BMPFile::width() const
+{
+	return m_imageWidth;
+}
+
+uint32_t BMPFile::height() const
+{
+	return m_imageHeight;
+}
+
+RGBAColor BMPFile::pixel(int column, int row) const
+{
+	// assume, that lines are stored in a reversed order
+	const auto x = column;
+	const auto y = (m_imageHeight - 1) - row;
+	
+	const auto offset = m_pixelArrayOffset + (y * (m_bitDepth * m_imageWidth + m_rowPaddingBits) + x * m_bitDepth) / 8;
+
+	const auto b = m_data.at(offset);
+	const auto g = m_data.at(offset + 1);
+	const auto r = m_data.at(offset + 2);
+	const auto a = m_data.at(offset + 3);
+	
+	return { r, g, b, a };
+}
+
+uint32_t BMPFile::packed4(std::byte* bytes)
+{
+	// little-endian
+	return static_cast<unsigned char>(bytes[3]) << 24 |
+		static_cast<unsigned char>(bytes[2]) << 16 |
+		static_cast<unsigned char>(bytes[1]) << 8 |
+		static_cast<unsigned char>(bytes[0]);
+}
+
+uint32_t BMPFile::packed2(std::byte* bytes)
+{
+	// little-endian
+	return static_cast<unsigned char>(bytes[1]) << 8 |
+		static_cast<unsigned char>(bytes[0]);
 }
