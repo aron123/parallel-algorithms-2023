@@ -1,7 +1,5 @@
 #include "BMPFile.h"
 
-#include <utility>
-
 constexpr auto BMP_HEADER_SIZE = 14;
 constexpr auto PIXEL_ARR_OFFSET_OFFSET = 10;
 constexpr auto IMG_WIDTH_OFFSET = BMP_HEADER_SIZE + 4;
@@ -20,6 +18,19 @@ void BMPFile::setData(const std::vector<std::byte>& data)
 	{
 		parseData();
 	}
+}
+
+void BMPFile::setPixel(size_t column, size_t row, const RGBAColor& color)
+{
+	// assume, that lines are stored in a reversed order
+	const auto x = column;
+	const auto y = (m_imageHeight - 1) - row;
+	const auto offset = m_pixelArrayOffset + (y * (m_bitDepth * m_imageWidth + m_rowPaddingBits) + x * m_bitDepth) / 8;
+
+	m_data[offset] = color.b;
+	m_data[offset + 1] = color.g;
+	m_data[offset + 2] = color.r;
+	m_data[offset + 3] = color.a;
 }
 
 const std::vector<std::byte>& BMPFile::data() const
@@ -52,12 +63,17 @@ uint32_t BMPFile::height() const
 	return m_imageHeight;
 }
 
-RGBAColor BMPFile::pixel(int column, int row) const
+RGBAColor BMPFile::pixel(size_t column, size_t row) const
 {
+	// zero-padding
+	if (column < 0 || row < 0 || column >= m_imageWidth || row >= m_imageHeight)
+	{
+		return { std::byte{0}, std::byte{0}, std::byte{0}, std::byte{0} };
+	}
+
 	// assume, that lines are stored in a reversed order
 	const auto x = column;
 	const auto y = (m_imageHeight - 1) - row;
-	
 	const auto offset = m_pixelArrayOffset + (y * (m_bitDepth * m_imageWidth + m_rowPaddingBits) + x * m_bitDepth) / 8;
 
 	const auto b = m_data.at(offset);

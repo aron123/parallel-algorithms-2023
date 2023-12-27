@@ -4,6 +4,7 @@
 #include "BMPFile.h"
 #include "BMPSerializer.h"
 #include "SerialMedianFilter.h"
+#include "SortingAlgorithms.h"
 
 int main(int argc, char* argv[])
 {
@@ -31,7 +32,7 @@ int main(int argc, char* argv[])
 		const auto inputPath = std::filesystem::current_path() / parameterValue;
 		BMPSerializer::load(inputPath, inputBMP);
 
-		const auto filter = new SerialMedianFilter(inputBMP, 3);
+		const auto filter = new SerialMedianFilter(inputBMP, 5, &SortingAlgorithms::quickSort);
 		BMPFile outputBMP({});
 		filter->filter(outputBMP);
 
