@@ -10,8 +10,8 @@ void SerialMedianFilter::filter(BMPFile& output)
 {
 	const auto width = static_cast<int32_t>(m_input.width());
 	const auto height = static_cast<int32_t>(m_input.height());
-
-	for(int32_t y = 0; y < height; ++y)
+	
+	for (int32_t y = 0; y < height; ++y)
 	{
 		for (int32_t x = 0; x < width; ++x)
 		{

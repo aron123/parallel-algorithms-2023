@@ -150,6 +150,7 @@
     <ClCompile Include="BMPSerializer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
+    <ClCompile Include="ParallelMedianFilter.cpp" />
     <ClCompile Include="SerialMedianFilter.cpp" />
     <ClCompile Include="SortingAlgorithms.cpp" />
   </ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="BMPFile.h" />
     <ClInclude Include="BMPSerializer.h" />
     <ClInclude Include="MedianFilter.h" />
+    <ClInclude Include="ParallelMedianFilter.h" />
     <ClInclude Include="SerialMedianFilter.h" />
     <ClInclude Include="SortingAlgorithms.h" />
   </ItemGroup>

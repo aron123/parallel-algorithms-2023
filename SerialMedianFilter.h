@@ -11,7 +11,7 @@ public:
 
 	void filter(BMPFile& output) override;
 
-private:
+protected:
 	const BMPFile& m_input;
 	BMPFile m_output;
 	int m_kernelSize;
