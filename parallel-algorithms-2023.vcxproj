@@ -78,9 +78,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>parallel.exe</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>parallel.exe</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -150,6 +152,7 @@
     <ClCompile Include="BMPSerializer.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="MedianFilter.cpp" />
+    <ClCompile Include="NoiseGenerator.cpp" />
     <ClCompile Include="ParallelMedianFilter.cpp" />
     <ClCompile Include="SerialMedianFilter.cpp" />
     <ClCompile Include="SortingAlgorithms.cpp" />
@@ -159,9 +162,13 @@
     <ClInclude Include="BMPFile.h" />
     <ClInclude Include="BMPSerializer.h" />
     <ClInclude Include="MedianFilter.h" />
+    <ClInclude Include="NoiseGenerator.h" />
     <ClInclude Include="ParallelMedianFilter.h" />
     <ClInclude Include="SerialMedianFilter.h" />
     <ClInclude Include="SortingAlgorithms.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

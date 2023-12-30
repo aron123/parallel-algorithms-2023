@@ -42,6 +42,9 @@
     <ClCompile Include="ParallelMedianFilter.cpp">
       <Filter>Source Files\MedianFilters</Filter>
     </ClCompile>
+    <ClCompile Include="NoiseGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BMPFile.h">
@@ -65,5 +68,11 @@
     <ClInclude Include="ParallelMedianFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NoiseGenerator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
 </Project>
