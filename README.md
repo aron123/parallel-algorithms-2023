@@ -12,7 +12,7 @@ BMPs with the following parameters can be used:
 - 32-bit color depth
 - uncompressed
 - reversed line order
-- [Photoshop bit mask](https://en.wikipedia.org/wiki/BMP_file_format#/media/File:SLNotation44440.svg)
+- [Photoshop-like channel order](https://en.wikipedia.org/wiki/BMP_file_format#/media/File:SLNotation44440.svg)
 
 ## Usage
 Project is configured to build with MSVC, but the code itself is intended to be portable.
@@ -47,11 +47,17 @@ parallel.exe median-filter <kernel-size> <sorting-function> <thread-count> <inpu
 | kernel-size | Size of the kernel to be used. It is a single number (e.g. input `3` produces a 3x3 kernel).<br>It is recommended to use an odd number. |
 | sorting-function | Sorting method to be used. Possible values are: `bucket`, `bucket-parallel`, `quick`, `quick-parallel` |
 | thread-count | Number of threads to be used. Possible values are:<br>`1`: serial execution,<br>`0`: dynamic parallel execution (OpenMP determines thread count),<br>greater than zero: fixed thread count |
-| input-files | Images to process. It can be multiple files, delimited by `|`, e.g. `pic0.bmp|pic1.bmp|pic2.bmp`. |
+| input-files | Images to process. It can be multiple files, delimited by `\|`, e.g. `pic0.bmp\|pic1.bmp\|pic2.bmp`. |
 | output-folder | Path to a directory, where output files should be stored. The output files are named the same as the input. |
 
 **NOTE**, that the output directory must exist before running the command, otherwise the output will not be saved.
 If the output file is already exists, the program will overwrite it.
+
+E.g. to filter multiple images using a 3x3 kernel, quicksort algorithm, and 8 threads, run:
+
+```
+parallel.exe median-filter 3 quick 8 pic0.bmp\|pic1.bmp\|pic2.bmp ./out
+```
 
 ## Sample images used
 
