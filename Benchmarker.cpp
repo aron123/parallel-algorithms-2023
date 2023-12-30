@@ -31,6 +31,11 @@ const std::vector<long long>& Benchmarker::times()
 	return m_benchmarks;
 }
 
+long long Benchmarker::lastTime() const
+{
+    return m_benchmarks[m_benchmarks.size() - 1];
+}
+
 float Benchmarker::averageTime()
 {
     if (m_benchmarks.empty()) {

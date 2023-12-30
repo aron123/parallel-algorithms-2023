@@ -3,7 +3,7 @@
 class ParallelMedianFilter : public SerialMedianFilter
 {
 public:
-	ParallelMedianFilter(const BMPFile& input, int kernelSize, std::function<void(std::vector<std::byte>&)> sortingFunction, int threads = -1);
+	ParallelMedianFilter(const BMPFile& input, int kernelSize, SortingFunction sortingFunction, int threads = 0);
 
 	void filter(BMPFile& output) override;
 

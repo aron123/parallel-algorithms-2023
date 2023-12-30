@@ -11,6 +11,7 @@ public:
 	void stopBenchmark();
 
 	const std::vector<long long>& times();
+	long long lastTime() const;
 	float averageTime();
 
 private:

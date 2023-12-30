@@ -1,7 +1,6 @@
 #include "SerialMedianFilter.h"
 
-SerialMedianFilter::SerialMedianFilter(const BMPFile& input, int kernelSize,
-                                       std::function<void(std::vector<std::byte>&)> sortingFunction)
+SerialMedianFilter::SerialMedianFilter(const BMPFile& input, int kernelSize, SortingFunction sortingFunction)
 	: m_input(input), m_output(BMPFile(input)), m_kernelSize(kernelSize), m_sort(std::move(sortingFunction))
 {
 }

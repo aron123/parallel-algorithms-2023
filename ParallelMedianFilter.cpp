@@ -3,7 +3,7 @@
 #include <omp.h>
 #include <utility>
 
-ParallelMedianFilter::ParallelMedianFilter(const BMPFile& input, int kernelSize, std::function<void(std::vector<std::byte>&)> sortingFunction, int threads)
+ParallelMedianFilter::ParallelMedianFilter(const BMPFile& input, int kernelSize, SortingFunction sortingFunction, int threads)
 	: SerialMedianFilter(input, kernelSize, std::move(sortingFunction)),
 	m_threads(threads)
 {}
@@ -13,7 +13,7 @@ void ParallelMedianFilter::filter(BMPFile& output)
 	const auto width = static_cast<int32_t>(m_input.width());
 	const auto height = static_cast<int32_t>(m_input.height());
 
-	if (m_threads > 0)
+	if (m_threads > 1)
 	{
 		omp_set_num_threads(m_threads);
 	}

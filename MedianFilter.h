@@ -1,5 +1,9 @@
 #pragma once
+#include <functional>
+
 #include "BMPFile.h"
+
+using SortingFunction = std::function<void(std::vector<std::byte>&)>;
 
 class MedianFilter
 {

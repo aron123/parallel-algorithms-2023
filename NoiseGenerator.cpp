@@ -4,6 +4,16 @@
 
 void NoiseGenerator::generateNoise(BMPFile& bmp, float noiseLevel)
 {
+	if (noiseLevel < 0.0f)
+	{
+		noiseLevel = 0.0f;
+	}
+
+	if (noiseLevel > 1.0f)
+	{
+		noiseLevel = 1.0f;
+	}
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	const std::uniform_real_distribution distribution(0.0f, 1.0f);
@@ -20,7 +30,7 @@ void NoiseGenerator::generateNoise(BMPFile& bmp, float noiseLevel)
 #pragma omp parallel for schedule(static)
 		for (int32_t x = 0; x < width; ++x)
 		{
-			if (distribution(gen) < 0.15f)
+			if (distribution(gen) < noiseLevel)
 			{
 				bmp.setPixel(x, y, distribution(gen) < 0.5f ? white : black);
 			}

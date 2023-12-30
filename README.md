@@ -5,34 +5,57 @@ This task was issued at the University of Miskolc, Hungary in 2023.
 
 ## Precautions
 
-- custom, naive BMP parser
-- 32 bit depth, uncompressed, Windows-BMP, reversed line order, alpha channel is not used, bitmask -> Photoshop
+The project uses a custom naive BMP parser, which is not suitable for processing any BMP file.
 
-## Noise generation
+BMPs with the following parameters can be used:
+- Windows format
+- 32-bit color depth
+- uncompressed
+- reversed line order
+- [Photoshop bit mask](https://en.wikipedia.org/wiki/BMP_file_format#/media/File:SLNotation44440.svg)
 
-- existence of input file is not checked
-- output directory should exists
-- file would be rewritten
+## Usage
+Project is configured to build with MSVC, but the code itself is intended to be portable.
 
-```
-parallel.exe generate-noise <percentage> <input-file> <output-file>
-```
+### Noise generation
 
-## Median filtering
-
-- existence of input file is not checked
-- output directory should exists
-- file would be rewritten
-
-- kernel size should be an even number (e.g. `3` -> 3x3 kernel is used)
-- sorting: `bucket`, `bucket-parallel`, `quick`, `quick-parallel`
-- thread: `-1`: serial, `0`: auto parallel, greater than zero: fixed thread count
+To generate noise to an image, run:
 
 ```
-parallel.exe median-filter <kernel-size> <sorting-function> <thread-count> <input-file> <output-file>
+parallel.exe generate-noise <percentage> <input-files> <output-folder>
 ```
 
-## Used images
+**NOTE**, that the output directory must exist before running the command, otherwise the output will not be saved.
+If the output file is already exists, the program will overwrite it.
+
+E.g. to generate 15% noise to the input image, run:
+
+```
+parallel.exe generate-noise 0.15 ./img/0.bmp ./output
+```
+
+### Median filtering
+
+To apply median filter to an image, run:
+
+```
+parallel.exe median-filter <kernel-size> <sorting-function> <thread-count> <input-files> <output-folder>
+```
+
+| Parameter | Description |
+| --------- | ----------- |
+| kernel-size | Size of the kernel to be used. It is a single number (e.g. input `3` produces a 3x3 kernel).<br>It is recommended to use an odd number. |
+| sorting-function | Sorting method to be used. Possible values are: `bucket`, `bucket-parallel`, `quick`, `quick-parallel` |
+| thread-count | Number of threads to be used. Possible values are:<br>`1`: serial execution,<br>`0`: dynamic parallel execution (OpenMP determines thread count),<br>greater than zero: fixed thread count |
+| input-files | Images to process. It can be multiple files, delimited by `|`, e.g. `pic0.bmp|pic1.bmp|pic2.bmp`. |
+| output-folder | Path to a directory, where output files should be stored. The output files are named the same as the input. |
+
+**NOTE**, that the output directory must exist before running the command, otherwise the output will not be saved.
+If the output file is already exists, the program will overwrite it.
+
+## Sample images used
+
+Sample images are published under certain Creative Commons licenses. Check URLs for more information.
 
 - Mathias Appel - [Siberian Tiger](https://commons.wikimedia.org/wiki/File:Siberian_Tiger_-_53220812820.jpg)
 - Stewart Nimmo - [Fox Glacier, West Coast, New Zealand](https://commons.wikimedia.org/wiki/File:TWC_Fox_%E2%80%A2_Nimmo_%E2%80%A2_MRD_27.jpg)

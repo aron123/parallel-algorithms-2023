@@ -8,8 +8,13 @@ void BMPSerializer::load(const std::filesystem::path& filePath, BMPFile& bmpFile
 	std::vector<std::byte> data(size);
 
 	std::ifstream inputFile(filePath, std::ios_base::binary);
+	if (!filePath.has_filename() || !inputFile.good())
+	{
+		const auto errorMessage = std::string("Input is not exists or is not a file: ") + filePath.filename().string();
+		throw std::exception(errorMessage.c_str());
+	}
 
-	inputFile.read(reinterpret_cast<char*>(data.data()), size);
+	inputFile.read(reinterpret_cast<char*>(data.data()), static_cast<std::streamsize>(size));
 	inputFile.close();
 
 	bmpFile.setData(data);
@@ -19,7 +24,8 @@ void BMPSerializer::write(const std::filesystem::path& filePath, const BMPFile& 
 {
 	if (file.data().empty())
 	{
-		throw std::exception("ERROR: File is empty.");
+		const auto errorMessage = std::string("File to be saved is empty (path: ") + filePath.string() + ").";
+		throw std::exception(errorMessage.c_str());
 	}
 
 	std::ofstream outputFile{ filePath, std::ios::binary };
