@@ -56,7 +56,7 @@ If the output file is already exists, the program will overwrite it.
 E.g. to filter multiple images using a 3x3 kernel, quicksort algorithm, and 8 threads, run:
 
 ```
-parallel.exe median-filter 3 quick 8 pic0.bmp\|pic1.bmp\|pic2.bmp ./out
+parallel.exe median-filter 3 quick 8 pic0.bmp|pic1.bmp|pic2.bmp ./out
 ```
 
 ## Sample images used
