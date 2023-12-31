@@ -102,7 +102,7 @@ void SortingAlgorithms::quickSort(std::vector<std::byte>& vector)
 	}
 }
 
-int64_t SortingAlgorithms::partition(std::vector<std::byte>& vec, int64_t low, int64_t high) {
+int64_t SortingAlgorithms::parallelPartition(std::vector<std::byte>& vec, int64_t low, int64_t high) {
 	const auto pivot = vec[high];
 	auto i = low - 1;
 
@@ -123,10 +123,10 @@ int64_t SortingAlgorithms::partition(std::vector<std::byte>& vec, int64_t low, i
 	return i + 1;
 }
 
-void SortingAlgorithms::quickSortWith(std::vector<std::byte>& vec, int64_t low, int64_t high) {
+void SortingAlgorithms::parallelQuickSortWith(std::vector<std::byte>& vec, int64_t low, int64_t high) {
 	if (low < high)
 	{
-		const auto pivotIndex = partition(vec, low, high);
+		const auto pivotIndex = parallelPartition(vec, low, high);
 
 #pragma omp parallel sections
 		{
@@ -134,13 +134,13 @@ void SortingAlgorithms::quickSortWith(std::vector<std::byte>& vec, int64_t low, 
 			{
 				if (pivotIndex > 0)
 				{
-					quickSortWith(vec, low, pivotIndex - 1);
+					parallelQuickSortWith(vec, low, pivotIndex - 1);
 				}
 			}
 
 #pragma omp section
 			{
-				quickSortWith(vec, pivotIndex + 1, high);
+				parallelQuickSortWith(vec, pivotIndex + 1, high);
 			}
 		}
 	}
@@ -153,7 +153,7 @@ void SortingAlgorithms::parallelQuickSort(std::vector<std::byte>& vector)
 #pragma omp parallel
 		{
 #pragma omp single nowait
-			quickSortWith(vector, 0, vector.size() - 1);
+			parallelQuickSortWith(vector, 0, static_cast<int64_t>(vector.size() - 1));
 		}
 	}
 }

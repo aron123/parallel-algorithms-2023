@@ -119,7 +119,7 @@ void printHelp(const char* message)
 
 int main(int argc, char* argv[])
 {
-	if (argc < 2 || (strcmp(argv[1], "median-filter") != 0 && strcmp(argv[1], "generate-noise") != 0))
+	if (argc < 2 || (!areEqual(argv[1], "median-filter") && !areEqual(argv[1], "generate-noise")))
 	{
 		printHelp("\nInvalid parameters are given. Usage options:");
 		return ARGUMENT_ERROR;

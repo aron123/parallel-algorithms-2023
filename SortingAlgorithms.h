@@ -14,7 +14,7 @@ private:
 	static size_t partition(std::vector<std::byte>& vec, size_t low, size_t high);
 	static void quickSortWith(std::vector<std::byte>& vec, size_t low, size_t high);
 
-	static int64_t partition(std::vector<std::byte>& vec, int64_t low, int64_t high);
-	static void quickSortWith(std::vector<std::byte>& vec, int64_t low, int64_t high);
+	static int64_t parallelPartition(std::vector<std::byte>& vec, int64_t low, int64_t high);
+	static void parallelQuickSortWith(std::vector<std::byte>& vec, int64_t low, int64_t high);
 };
 
