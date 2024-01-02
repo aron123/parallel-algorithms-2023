@@ -69,8 +69,8 @@ void generateNoise(const std::vector<std::filesystem::path>& inputFilePaths, cha
 	}
 }
 
-void medianFilter(const std::vector<std::filesystem::path>& inputFilePaths, char* const outputFolder, const int kernelSize,
-	const SortingFunction& sortingFunction, const int threadCount)
+void medianFilter(const std::vector<std::filesystem::path>& inputFilePaths, const char* outputFolder, int kernelSize,
+	const SortingFunction& sortingFunction, int threadCount)
 {
 	const auto benchmarker = new Benchmarker();
 

@@ -38,7 +38,7 @@ void SortingAlgorithms::parallelBucketSort(std::vector<std::byte>& vector)
 
 	std::vector<std::vector<std::byte>> buckets(n);
 
-#pragma omp parallel for  // NOLINT(clang-diagnostic-source-uses-openmp)
+#pragma omp parallel for schedule(static)  // NOLINT(clang-diagnostic-source-uses-openmp)
 	for (int64_t i = 0; i < n; ++i)
 	{
 		const int bucketIndex = static_cast<int>(std::floor(static_cast<float>(n) * static_cast<float>(vector[i]) / static_cast<float>(M)));
@@ -46,14 +46,14 @@ void SortingAlgorithms::parallelBucketSort(std::vector<std::byte>& vector)
 		buckets[bucketIndex].push_back(vector[i]);
 	}
 
-#pragma omp parallel for
+#pragma omp parallel for schedule(static)
 	for (int64_t i = 0; i < n; ++i) // NOLINT(modernize-loop-convert)
 	{  
 		std::ranges::sort(buckets[i]);
 	}
 
 	int index = 0;
-#pragma omp parallel for
+#pragma omp parallel for schedule(static)
 	for (int64_t i = 0; i < n; ++i)  // NOLINT(modernize-loop-convert)
 	{
 		for (const auto value : buckets[i])
@@ -106,7 +106,7 @@ int64_t SortingAlgorithms::parallelPartition(std::vector<std::byte>& vec, int64_
 	const auto pivot = vec[high];
 	auto i = low - 1;
 
-#pragma omp parallel for
+#pragma omp parallel for schedule(static)
 	for (int64_t j = low; j < high; ++j)
 	{
 		if (vec[j] < pivot)
