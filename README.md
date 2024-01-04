@@ -17,6 +17,8 @@ BMPs with the following parameters can be used:
 ## Usage
 Project is configured to build with MSVC, but the code itself is intended to be portable.
 
+Executable binary (win-x64) and sample images can be downloaded from [Releases page](https://github.com/aron123/parallel-algorithms-2023/releases/tag/v1.0).
+
 ### Noise generation
 
 To generate noise to an image, run:
@@ -59,7 +61,7 @@ E.g. to filter multiple images using a 3x3 kernel, quicksort algorithm, and 8 th
 parallel.exe median-filter 3 quick 8 pic0.bmp|pic1.bmp|pic2.bmp ./out
 ```
 
-Examples can be found under `script/` folder.
+Examples can be found [here](https://github.com/aron123/parallel-algorithms-2023/blob/master/script/examples.ps1).
 
 ## Sample images used
 
