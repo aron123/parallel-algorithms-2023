@@ -1,4 +1,4 @@
-# Optimizing median filter (parallel algorithms assignment)
+# Optimization of median filter (parallel algorithms assignment)
 
 This repository contains an implementation of median filter. The project aims to explore optimization possibilities for the algorithm.
 This task was issued at the University of Miskolc, Hungary in 2023.
