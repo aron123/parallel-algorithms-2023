@@ -59,6 +59,8 @@ E.g. to filter multiple images using a 3x3 kernel, quicksort algorithm, and 8 th
 parallel.exe median-filter 3 quick 8 pic0.bmp|pic1.bmp|pic2.bmp ./out
 ```
 
+Examples can be found under `script/` folder.
+
 ## Sample images used
 
 Sample images are published under certain Creative Commons licenses. Check URLs for more information.
